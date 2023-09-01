@@ -1,0 +1,28 @@
+body,*{
+    margin: 0;
+    padding: 0;
+}
+.princ{
+    height: 653px;
+    width: 280px;
+    background-color: black;
+}
+
+.TimerDiv{
+    position: relative;
+    background-color: rgb(255, 0, 0);
+    width: 100%;
+    height: 50%;
+    margin-bottom: 10px;
+    font-size: xx-large;
+}
+button{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+}
