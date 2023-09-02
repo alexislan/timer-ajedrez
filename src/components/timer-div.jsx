@@ -3,43 +3,50 @@ import './timer-div.css';
 
 
 export const TimerDiv = () =>{
-    const [countA, setCountA] = useState(15);
-    const [countB, setCountB] = useState(15);
-    const [isStartedA, setIsStartedA] = useState(true);
-    const [isStartedB, setIsStartedB] = useState(true);
+    const [countA, setCountA] = useState(60);
+    const [countB, setCountB] = useState(60);
+    const [isStartedA, setIsStartedA] = useState(false);
+    const [isStartedB, setIsStartedB] = useState(false);
     const timerRefA = useRef(null);
     const timerRefB = useRef(null);
 
     const handleStartA = () => {
+
         clearInterval(timerRefA.current);
         timerRefA.current = setInterval(()=>{
         setCountA((prevCount) => prevCount - 1)
         },1000)
-        setIsStartedA(false);
-        setIsStartedB(false);
+        setIsStartedA(true)
+        
     }
 
     const handleStopA = () => {
         clearInterval(timerRefA.current);
-        if(!isStartedB){
+        if(timerRefA.current !== null && !isStartedB){
             setCountA((prevCount) => prevCount + 3)
         }
-        handleStartB();
+        if(!isStartedB){
+            setIsStartedA(false);
+            handleStartB();
+        }
     }
     const handleStartB = () => {
         clearInterval(timerRefB.current);
         timerRefB.current = setInterval(()=>{
         setCountB((prevCount) => prevCount - 1)
         },1000)
-        setIsStartedB(false);
+        setIsStartedB(true);
     }
 
     const handleStopB = () => {
         clearInterval(timerRefB.current);
-        if(!isStartedB){
+        if(timerRefB.current !== null && !isStartedA){
             setCountB((prevCount) => prevCount + 3)
         }
-        handleStartA();
+        if(!isStartedA){
+            setIsStartedB(false);
+            handleStartA();
+        }
     }
     return(
         <div className="princ">
