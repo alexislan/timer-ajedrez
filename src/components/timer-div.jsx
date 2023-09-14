@@ -3,8 +3,12 @@ import './timer-div.css';
 
 
 export const TimerDiv = () =>{
-    const [countA, setCountA] = useState(60);
-    const [countB, setCountB] = useState(60);
+    const [hoursA, setHoursA] = useState(15);
+    const [hoursB, setHoursB] = useState(15);
+    const [minutesA, setMinutesA] = useState(59);
+    const [minutesB, setMinutesB] = useState(10);
+    const [secondsA, setSecondsA] = useState(59);
+    const [secondsB, setSecondsB] = useState(10);
     const [isStartedA, setIsStartedA] = useState(false);
     const [isStartedB, setIsStartedB] = useState(false);
     const timerRefA = useRef(null);
@@ -14,7 +18,10 @@ export const TimerDiv = () =>{
 
         clearInterval(timerRefA.current);
         timerRefA.current = setInterval(()=>{
-        setCountA((prevCount) => prevCount - 1)
+        setMinutesA((prevCount) => prevCount - 1 )
+        },60000)
+        timerRefA.current = setInterval(()=>{
+        setSecondsA((prevCount) => prevCount == 0 ? 59 : prevCount - 1)
         },1000)
         setIsStartedA(true)
         
@@ -23,7 +30,7 @@ export const TimerDiv = () =>{
     const handleStopA = () => {
         clearInterval(timerRefA.current);
         if(timerRefA.current !== null && !isStartedB){
-            setCountA((prevCount) => prevCount + 3)
+            setSecondsA((prevCount) => prevCount + 3)
         }
         if(!isStartedB){
             setIsStartedA(false);
@@ -33,7 +40,10 @@ export const TimerDiv = () =>{
     const handleStartB = () => {
         clearInterval(timerRefB.current);
         timerRefB.current = setInterval(()=>{
-        setCountB((prevCount) => prevCount - 1)
+        setMinutesB((prevCount) => prevCount - 1 )
+        },60000)
+        timerRefB.current = setInterval(()=>{
+        setSecondsB((prevCount) => prevCount == 0 ? 59 : prevCount - 1)
         },1000)
         setIsStartedB(true);
     }
@@ -41,7 +51,7 @@ export const TimerDiv = () =>{
     const handleStopB = () => {
         clearInterval(timerRefB.current);
         if(timerRefB.current !== null && !isStartedA){
-            setCountB((prevCount) => prevCount + 3)
+            setSecondsB((prevCount) =>  prevCount + 3)
         }
         if(!isStartedA){
             setIsStartedB(false);
@@ -51,11 +61,11 @@ export const TimerDiv = () =>{
     return(
         <div className="princ">
             <div className="TimerDiv">
-                <p>{countA}</p>
+                <p>{secondsA < 10 ?  minutesA + ':' + '0' + secondsA : minutesA + ':' + secondsA}</p>
                 <button onClick={handleStopA}></button>
             </div>
             <div className="TimerDiv">
-                <p>{countB}</p>
+                <p>{minutesB < 10 && secondsB < 10 ? '0' + minutesB + ':' + '0' + secondsB : minutesB < 10 ? '0' + minutesB + ':' + secondsB : secondsB < 10 ? minutesB + ':' + '0' + secondsB : minutesB + ':' + secondsB}</p>
                 <button onClick={handleStopB}></button>
             </div>
         </div>
