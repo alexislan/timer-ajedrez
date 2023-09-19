@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import './App.css'
-import { TimerDiv } from './components/timer-div'
+import { Prueba } from './components/prueba'
+
 function App() {
-  const [count, setCount] = useState(0)
+  
 
   return (
-  <TimerDiv/>
+    <Prueba/>
   )
 }
 
