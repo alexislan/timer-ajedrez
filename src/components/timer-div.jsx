@@ -78,9 +78,16 @@ export const TimerDiv = ({hour, minute, second}) =>{
     //     // setSeconds((prevCount) =>  prevCount + 3 > 59 ? (prevCount + 3) - 60 : prevCount + 3);
     //     // setIsStarted(false);
     // }
+    
 
+    //solucionar el +3
     const handleClick = () =>{
         if(isStarted){
+            if(player == "jugador1"){
+                timer.jugador1.seconds = timer.jugador1.seconds + 3
+            }else{
+                timer.jugador2.seconds = timer.jugador2.seconds + 3
+            }
             setPlayer((prev) => 
                 prev === 'jugador1' ? 'jugador2' : 'jugador1'
             );
