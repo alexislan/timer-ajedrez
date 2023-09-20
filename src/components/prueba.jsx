@@ -9,14 +9,6 @@ export const Prueba = () => {
         hour = {1}
         minute = {10}
         second = {10}
-        turn = {true}
-        handleClick={hanleStop}
-        />
-        <TimerDiv
-        hour = {1}
-        minute = {10}
-        second = {10}
-        turn = {false}
         />
       </div>
     )
