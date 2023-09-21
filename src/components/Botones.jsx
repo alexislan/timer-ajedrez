@@ -1,5 +1,7 @@
 import { TimerDiv } from './timer-div'
 import React, { useEffect, useReducer, useRef, useState } from "react";
+import { Modal } from './Modal';
+import { useModal } from '../useModal';
 
 const timerReducer = (state, action) =>{
   const {type} = action;
@@ -60,19 +62,38 @@ const timerReducer = (state, action) =>{
 
 
 export const Botones = () => {
-    //tengo que usar aca el usereducer
-    //pasar la logica a este componente
     const [player, setPlayer] = useState("");
+    const [horas, setH] = useState();
+    console.log(horas);
+    const [minutos, setM] = useState();
+    const [segundos, setS] = useState();
     const [isStarted1, setIsStarted1] = useState(false);
     const [isStarted2, setIsStarted2] = useState(false);
     const timerRefP1 = useRef(null);
     const timerRefP2 = useRef(null);
     const [timer, dispatch] = useReducer(timerReducer, {
-      jugador1: {hours: 1, minutes: 0, seconds: 10},
-      jugador2: {hours: 1, minutes: 0, seconds: 10}
+      jugador1: {hours: 0, minutes: 0, seconds: 0},
+      jugador2: {hours: 0, minutes: 0, seconds: 0}
     });
 
+    //para usar la modal
+    const { isShowing, toggle } = useModal();
+
+    const handleStart = () => {
+      if(horas || minutos || segundos)
+      {
+        if(!player || player === "jugador1"){
+          setPlayer("jugador1");
+          setIsStarted1(true)
+        }else if ("jugador2"){
+          setPlayer("jugador2");
+          setIsStarted2(true)
+        }
+      }
+    }
+
     const handleStart1 = () => {
+    if(horas || minutos || segundos){
       if(!player || player == "jugador1"){
         clearInterval(timerRefP1.current)
         setPlayer("jugador2")
@@ -92,7 +113,9 @@ export const Botones = () => {
         }
       }
     }
+    }
     const handleStart2 = () => {
+    if(horas || minutos || segundos){
       if(!player || player == "jugador2"){
         clearInterval(timerRefP2.current)
         setPlayer("jugador1")
@@ -111,14 +134,64 @@ export const Botones = () => {
           }
         }
       }
+    }
   }
-    
+  
+  const handleStop = () =>{
+      clearInterval(timerRefP1.current);
+      clearInterval(timerRefP2.current);
+      setIsStarted1(false);
+      setIsStarted2(false);
+  } 
+  const handleConfig = () => {
+    clearInterval(timerRefP1.current);
+    clearInterval(timerRefP2.current);
+    setIsStarted1(false);
+    setIsStarted2(false);
+    toggle();
+  }
+
+  const handleReset = () => {
+    //hacer la logica con las cosas que vienen de afuera (setear los timer con los argumentos)
+    if(horas || minutos || segundos){
+      setIsStarted1(false);
+      setIsStarted2(false);
+      timer.jugador2.hours = horas
+      timer.jugador2.minutes = minutos
+      timer.jugador2.seconds = segundos
+      timer.jugador1.hours = horas
+      timer.jugador1.minutes = minutos
+      timer.jugador1.seconds = segundos
+    }
+  }
+
+  const handleSave = (values) =>{
+    setH(!parseInt(values.valor1) ? 0 : parseInt(values.valor1))
+    setM(!parseInt(values.valor2) ? 0 : parseInt(values.valor2))
+    setS(!parseInt(values.valor3) ? 0 : parseInt(values.valor3))
+    timer.jugador2.hours = !parseInt(values.valor1) ? 0 : parseInt(values.valor1)
+    timer.jugador2.minutes = !parseInt(values.valor2) ? 0 : parseInt(values.valor2)
+    timer.jugador2.seconds = !parseInt(values.valor3) ? 0 : parseInt(values.valor3)
+    timer.jugador1.hours = !parseInt(values.valor1) ? 0 : parseInt(values.valor1)
+    timer.jugador1.minutes = !parseInt(values.valor2) ? 0 : parseInt(values.valor2)
+    timer.jugador1.seconds = !parseInt(values.valor3) ? 0 : parseInt(values.valor3)
+  }
     
     useEffect(() => {
         if(!isStarted1 && !isStarted2){
             clearInterval(timerRefP1.current);
             clearInterval(timerRefP2.current);
             return;
+        }
+        if(timer.jugador1.hours === 0 && timer.jugador1.minutes === 0 && timer.jugador1.seconds === 0){
+          clearInterval(timerRefP1.current);
+          clearInterval(timerRefP2.current);
+          return;
+        }
+        if(timer.jugador2.hours === 0 && timer.jugador2.minutes === 0 && timer.jugador2.seconds === 0){
+          clearInterval(timerRefP1.current);
+          clearInterval(timerRefP2.current);
+          return;
         }
         if(player == "jugador1"){
             timerRefP1.current = setInterval(() => {
@@ -144,7 +217,19 @@ export const Botones = () => {
         player = {"jugador1"}
         handleClick = {handleStart1}
         />
-        
+        <div className='conf'>
+
+        <i className={isStarted1 || isStarted2 ? "fa-solid fa-pause" : !isStarted1 && !isStarted2 ? "fa-solid fa-play" : "fa-solid fa-play"} 
+        onClick={isStarted1 || isStarted2 ? handleStop : handleStart}>
+        </i>
+        <i className="fa-solid fa-arrow-rotate-left" onClick={handleReset}></i>
+        <Modal show={isShowing} onCloseButtonClick={toggle}
+        onSave={handleSave}
+        >
+        Click on the close button to close the modal.
+        </Modal>
+        <i className="fa-solid fa-gear" onClick={handleConfig}></i>
+        </div>
         <TimerDiv
         hour = {timer.jugador2.hours}
         minute = {timer.jugador2.minutes}
