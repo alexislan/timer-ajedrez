@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import './App.css'
-import { Prueba } from './components/prueba'
+import { Botones } from './components/Botones'
 
 function App() {
   
 
   return (
-    <Prueba/>
+    <Botones/>
   )
 }
 
