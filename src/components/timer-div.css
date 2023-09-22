@@ -15,17 +15,17 @@ body,*{
 }
 .conf{
     height: 10vh;
-    background-color: antiquewhite;
+    background-color: #d7f7ff;
     display: flex;
     flex-direction: row;
     justify-content:space-evenly;
     align-items: center;
     font-size: 20px;
-  
+    color: #0B132B;
 }
 .TimerDiv{
     position: relative;
-    background-color: rgb(62, 213, 254);
+    background-color: #0B132B;
     width: 100vw;
     height: 44vh;
     border-bottom: 1px black solid;
@@ -36,10 +36,27 @@ body,*{
     flex-direction: column;
     font-family: 'Roboto', sans-serif;
     font-weight: 700;
+    color: #5BC0BE;
 }
 
 .j1{
     transform: rotate(180deg);
+}
+
+.timeMove {
+    position: relative;
+    background-color: #2e395b;
+    width: 100vw;
+    height: 44vh;
+    border-bottom: 1px #2e395b;
+    font-size: xx-large;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    color: #0B132B;
 }
 /* button{
     position: absolute;

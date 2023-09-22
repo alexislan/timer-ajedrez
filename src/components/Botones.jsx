@@ -232,6 +232,7 @@ export const Botones = () => {
         second = {timer.jugador1.seconds}
         player = {"jugador1"}
         handleClick = {handleStart1}
+        turn = {player === "jugador1"}
         />
         <div className='conf'>
 
@@ -242,7 +243,6 @@ export const Botones = () => {
         <Modal show={isShowing} onCloseButtonClick={toggle}
         onSave={handleSave}
         >
-        Click on the close button to close the modal.
         </Modal>
         <i className="fa-solid fa-gear" onClick={handleConfig}></i>
         </div>
@@ -251,6 +251,7 @@ export const Botones = () => {
         minute = {timer.jugador2.minutes}
         second = {timer.jugador2.seconds}
         player = {"jugador2"}
+        turn = {player === "jugador2"}
         handleClick = {handleStart2}
         />
       </div>

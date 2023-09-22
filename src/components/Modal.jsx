@@ -69,47 +69,59 @@ const handleSave = () => {
   return createPortal(
     <div className="modal-wrapper">
       <section className="modal">
-        <main>{children}</main>
         <footer>
-          <button onClick={onCloseButtonClick} className="botonmodal">Close Modal</button>
+          <button onClick={onCloseButtonClick} className="botonmodal"><i class="fa-solid fa-x"></i></button>
         </footer>
+        <main>
         <div className="inputsTimer">
-            <label>ingrese las horas</label>
+          <div className="inpu">
+            <p>Horas:</p>
             <input 
             type="number"
-            placeholder="Valor 1"
+            placeholder="0"
             value={input1}
             onChange={handleChange}
             maxLength={2}
             />
-            {error && <p style={{ color: 'red' }}>debe ser menor que 24</p>}
-            <label>ingrese los minutos</label>
+            {error && <p style={{ color: 'red' }}>Debe ser menor que 25</p>}
+          </div>
+          <div className="inpu">
+            <p>Minutos:</p>
             <input 
             type="number"
-            placeholder="Valor 2"
+            placeholder="0"
             value={input2}
             onChange={handleChange2} 
             />
-            {error2 && <p style={{ color: 'red' }}>debe ser menor que 59</p>}
-            <label>ingrese los segundos</label>
+            {error2 && <p style={{ color: 'red' }}>Debe ser menor que 60</p>}
+          </div>
+          <div className="inpu">
+            <p>Segundos:</p>
             <input 
             type="number"
-            placeholder="Valor 3"
+            placeholder="0"
             value={input3}
             onChange={handleChange3}
             />
-            {error3 && <p style={{ color: 'red' }}>debe ser menor que 59</p>}
-            <label>ingrese los segundos a sumar</label>
+            {error3 && <p style={{ color: 'red' }}>Debe ser menor que 60</p>}
+          </div>
+          <div className="inpu">
+            <p>Segundos a sumar:</p>
             <input 
             type="number"
-            placeholder="Valor 4"
+            placeholder="0"
             value={input4}
             onChange={handleChange4}
             />
-            {error4 && <p style={{ color: 'red' }}>debe ser menor que 59</p>}
-            <button onClick={handleSave}>guardar</button>
+            {error4 && <p style={{ color: 'red' }}>Debe ser menor que 60</p>}
+          </div>
+        </div>
+        <div className="botonG">
+            <button onClick={handleSave} className="botonGuardar">Empezar</button>
             {close ? <Botones/> : ''}
         </div>
+
+        </main>
       </section>
     </div>,
     document.body
