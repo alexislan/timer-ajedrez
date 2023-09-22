@@ -5,7 +5,6 @@ import { useModal } from '../useModal';
 
 const timerReducer = (state, action) =>{
   const {type} = action;
-  //se rompe cuando el minuto llega a 0
   switch(type){
       case "jugador1":
       return {
@@ -64,9 +63,9 @@ const timerReducer = (state, action) =>{
 export const Botones = () => {
     const [player, setPlayer] = useState("");
     const [horas, setH] = useState();
-    console.log(horas);
     const [minutos, setM] = useState();
     const [segundos, setS] = useState();
+    const [suma, setSuma] = useState();
     const [isStarted1, setIsStarted1] = useState(false);
     const [isStarted2, setIsStarted2] = useState(false);
     const timerRefP1 = useRef(null);
@@ -75,21 +74,20 @@ export const Botones = () => {
       jugador1: {hours: 0, minutes: 0, seconds: 0},
       jugador2: {hours: 0, minutes: 0, seconds: 0}
     });
-
-    //para usar la modal
+    
     const { isShowing, toggle } = useModal();
 
     const handleStart = () => {
-      if(horas || minutos || segundos)
-      {
-        if(!player || player === "jugador1"){
-          setPlayer("jugador1");
-          setIsStarted1(true)
-        }else if ("jugador2"){
-          setPlayer("jugador2");
-          setIsStarted2(true)
+        if(horas || minutos || segundos)
+        {
+          if(!player || player === "jugador1"){
+            setPlayer("jugador1");
+            setIsStarted1(true)
+          }else if ("jugador2"){
+            setPlayer("jugador2");
+            setIsStarted2(true)
+          }
         }
-      }
     }
 
     const handleStart1 = () => {
@@ -100,15 +98,15 @@ export const Botones = () => {
         setIsStarted1(true);
         setIsStarted2(false);
         if(timerRefP1.current){
-          if(timer.jugador1.seconds + 3 > 59){
-            timer.jugador1.seconds = (timer.jugador1.seconds + 3) - 60
+          if(timer.jugador1.seconds + suma > 59){
+            timer.jugador1.seconds = (timer.jugador1.seconds + suma) - 60
             if(timer.jugador1.minutes + 1 > 59){
               timer.jugador1.minutes = (timer.jugador1.minutes + 1) - 60;
             }else{
               timer.jugador1.minutes = timer.jugador1.minutes + 1
             }
           }else{
-            timer.jugador1.seconds = timer.jugador1.seconds + 3;
+            timer.jugador1.seconds = timer.jugador1.seconds + suma;
           }
         }
       }
@@ -116,32 +114,34 @@ export const Botones = () => {
     }
     const handleStart2 = () => {
     if(horas || minutos || segundos){
-      if(!player || player == "jugador2"){
-        clearInterval(timerRefP2.current)
-        setPlayer("jugador1")
-        setIsStarted2(true);
-        setIsStarted1(false);
-        if(timerRefP2.current){
-          if(timer.jugador2.seconds + 3 > 59){
-            timer.jugador2.seconds = (timer.jugador2.seconds + 3) - 60;
-            if(timer.jugador2.minutes + 1 > 59){
-              timer.jugador2.minutes = (timer.jugador2.minutes + 1) - 60;
+      
+        if(!player || player == "jugador2"){
+          clearInterval(timerRefP2.current)
+          setPlayer("jugador1")
+          setIsStarted2(true);
+          setIsStarted1(false);
+          if(timerRefP2.current){
+            if(timer.jugador2.seconds + suma > 59){
+              timer.jugador2.seconds = (timer.jugador2.seconds + suma) - 60;
+              if(timer.jugador2.minutes + 1 > 59){
+                timer.jugador2.minutes = (timer.jugador2.minutes + 1) - 60;
+              }else{
+                timer.jugador2.minutes = timer.jugador2.minutes + 1;
+              }
             }else{
-              timer.jugador2.minutes = timer.jugador2.minutes + 1;
+              timer.jugador2.seconds = timer.jugador2.seconds + suma ;
             }
-          }else{
-            timer.jugador2.seconds = timer.jugador2.seconds + 3;
           }
         }
-      }
+      
     }
   }
   
   const handleStop = () =>{
-      clearInterval(timerRefP1.current);
-      clearInterval(timerRefP2.current);
-      setIsStarted1(false);
-      setIsStarted2(false);
+    clearInterval(timerRefP1.current);
+    clearInterval(timerRefP2.current);
+    setIsStarted1(false);
+    setIsStarted2(false);
   } 
   const handleConfig = () => {
     clearInterval(timerRefP1.current);
@@ -154,8 +154,13 @@ export const Botones = () => {
   const handleReset = () => {
     //hacer la logica con las cosas que vienen de afuera (setear los timer con los argumentos)
     if(horas || minutos || segundos){
+      clearInterval(timerRefP2.current)
+      clearInterval(timerRefP1.current)
+      timerRefP1.current = null;
+      timerRefP2.current = null;
       setIsStarted1(false);
       setIsStarted2(false);
+      setPlayer("");
       timer.jugador2.hours = horas
       timer.jugador2.minutes = minutos
       timer.jugador2.seconds = segundos
@@ -169,6 +174,7 @@ export const Botones = () => {
     setH(!parseInt(values.valor1) ? 0 : parseInt(values.valor1))
     setM(!parseInt(values.valor2) ? 0 : parseInt(values.valor2))
     setS(!parseInt(values.valor3) ? 0 : parseInt(values.valor3))
+    setSuma(!parseInt(values.valor4) ? 0 : parseInt(values.valor4))
     timer.jugador2.hours = !parseInt(values.valor1) ? 0 : parseInt(values.valor1)
     timer.jugador2.minutes = !parseInt(values.valor2) ? 0 : parseInt(values.valor2)
     timer.jugador2.seconds = !parseInt(values.valor3) ? 0 : parseInt(values.valor3)
@@ -178,27 +184,13 @@ export const Botones = () => {
   }
     
     useEffect(() => {
-        if(!isStarted1 && !isStarted2){
-            clearInterval(timerRefP1.current);
-            clearInterval(timerRefP2.current);
-            return;
-        }
-        if(timer.jugador1.hours === 0 && timer.jugador1.minutes === 0 && timer.jugador1.seconds === 0){
-          clearInterval(timerRefP1.current);
-          clearInterval(timerRefP2.current);
-          return;
-        }
-        if(timer.jugador2.hours === 0 && timer.jugador2.minutes === 0 && timer.jugador2.seconds === 0){
-          clearInterval(timerRefP1.current);
-          clearInterval(timerRefP2.current);
-          return;
-        }
         if(player == "jugador1"){
-            timerRefP1.current = setInterval(() => {
-              dispatch({ type: "jugador1"})
-            }, 1000);
+          timerRefP1.current = setInterval(() => {
+            dispatch({ type: "jugador1"})
+          }, 1000);
         }else if(player === "jugador2"){
-            timerRefP2.current = setInterval(() => {
+          timerRefP2.current = setInterval(() => {
+              console.log("no para");
               dispatch({type: "jugador2"})
             }, 1000);
         }
@@ -207,6 +199,30 @@ export const Botones = () => {
             clearInterval(timerRefP2.current);
         }
     }, [isStarted1,isStarted2, player])
+
+
+    useEffect(()=>{
+      if(timer.jugador1.hours === 0 && timer.jugador1.minutes === 0 && timer.jugador1.seconds === 0){
+        clearInterval(timerRefP2.current);
+        clearInterval(timerRefP1.current);
+        setIsStarted2(false);
+        setIsStarted1(false);
+        setPlayer("");
+      }
+      if(timer.jugador2.hours === 0 && timer.jugador2.minutes === 0 && timer.jugador2.seconds === 0){
+        clearInterval(timerRefP2.current);
+        clearInterval(timerRefP1.current);
+        setIsStarted2(false);
+        setIsStarted1(false);
+        setPlayer("");
+        return;
+      }
+      if(!isStarted1 && !isStarted2){
+        clearInterval(timerRefP1.current);
+        clearInterval(timerRefP2.current);
+        return;
+    }
+    })
 
     return(
         <div className='princ'>

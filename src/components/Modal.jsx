@@ -2,7 +2,7 @@ import { Botones } from "./Botones";
 import "./Modal.css";
 import { createPortal } from "react-dom";
 import { useModal } from '../useModal';
-import React, { useEffect, useReducer, useRef, useState } from "react";
+import React, { useState } from "react";
 
 export const Modal = ({ show, onCloseButtonClick, children, onSave}) => {
     if (!show) {
@@ -12,20 +12,58 @@ export const Modal = ({ show, onCloseButtonClick, children, onSave}) => {
 const [input1, setInput1] = useState("");
 const [input2, setInput2] = useState("");
 const [input3, setInput3] = useState("");
+const [input4, setInput4] = useState("");
 const { isShowing, toggle } = useModal();
 const [close, setClose] = useState(false);
+const [error, setError] = useState(false);
+const [error2, setError2] = useState(false);
+const [error3, setError3] = useState(false);
+const [error4, setError4] = useState(false);
 
-const handleSave = () => {
-    const values = {
-      valor1: input1,
-      valor2: input2,
-      valor3: input3,
-    };
-    onSave(values);
-    setClose(true);
-    onCloseButtonClick();
 
+const handleChange = (event) => {
+  let inputValue = event.target.value;
+  setInput1(inputValue);
+  setError(false); 
 }
+
+const handleChange2 = (event) =>{
+  let inputValue = event.target.value;
+  setInput2(inputValue);
+  setError2(false); 
+}
+const handleChange3 = (event) =>{
+  let inputValue = event.target.value;
+  setInput3(inputValue);
+  setError3(false); 
+}
+const handleChange4 = (event) => {
+  let inputValue = event.target.value;
+  setInput4(inputValue);
+  setError4(false); 
+}
+const handleSave = () => {
+    let n1 = !parseInt(input1) ? 0 : parseInt(input1);
+    let n2 = !parseInt(input2) ? 0 : parseInt(input2);
+    let n3 = !parseInt(input3) ? 0 : parseInt(input3);
+    let n4 = !parseInt(input4) ? 0 : parseInt(input4);
+    setError(n1 > 24 )
+    setError2(n2 > 59 )
+    setError3(n3 > 59 )
+    setError4(n4 > 59 )
+    if (n1 < 25 && n2 < 60 && n3 < 60 && n4 < 60 ){
+      console.log(error);
+      const values = {
+        valor1: input1,
+        valor2: input2,
+        valor3: input3,
+        valor4: input4,
+      };
+      onSave(values);
+      setClose(true);
+      onCloseButtonClick();
+    } 
+  }
   
 
   return createPortal(
@@ -36,27 +74,39 @@ const handleSave = () => {
           <button onClick={onCloseButtonClick} className="botonmodal">Close Modal</button>
         </footer>
         <div className="inputsTimer">
-            <label htmlFor="1">ingrese las horas</label>
+            <label>ingrese las horas</label>
             <input 
             type="number"
             placeholder="Valor 1"
             value={input1}
-            onChange={(e) => setInput1(e.target.value)}
+            onChange={handleChange}
+            maxLength={2}
             />
-            <label htmlFor="1">ingrese los minutos</label>
+            {error && <p style={{ color: 'red' }}>debe ser menor que 24</p>}
+            <label>ingrese los minutos</label>
             <input 
             type="number"
             placeholder="Valor 2"
             value={input2}
-            onChange={(e) => setInput2(e.target.value)} 
+            onChange={handleChange2} 
             />
-            <label htmlFor="1">ingrese los segundos</label>
+            {error2 && <p style={{ color: 'red' }}>debe ser menor que 59</p>}
+            <label>ingrese los segundos</label>
             <input 
             type="number"
             placeholder="Valor 3"
             value={input3}
-            onChange={(e) => setInput3(e.target.value)}
+            onChange={handleChange3}
             />
+            {error3 && <p style={{ color: 'red' }}>debe ser menor que 59</p>}
+            <label>ingrese los segundos a sumar</label>
+            <input 
+            type="number"
+            placeholder="Valor 4"
+            value={input4}
+            onChange={handleChange4}
+            />
+            {error4 && <p style={{ color: 'red' }}>debe ser menor que 59</p>}
             <button onClick={handleSave}>guardar</button>
             {close ? <Botones/> : ''}
         </div>
