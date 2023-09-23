@@ -1,7 +1,6 @@
 import { Botones } from "./Botones";
 import "./Modal.css";
 import { createPortal } from "react-dom";
-import { useModal } from '../useModal';
 import React, { useState } from "react";
 
 export const Modal = ({ show, onCloseButtonClick, children, onSave}) => {
@@ -13,7 +12,6 @@ const [input1, setInput1] = useState("");
 const [input2, setInput2] = useState("");
 const [input3, setInput3] = useState("");
 const [input4, setInput4] = useState("");
-const { isShowing, toggle } = useModal();
 const [close, setClose] = useState(false);
 const [error, setError] = useState(false);
 const [error2, setError2] = useState(false);
@@ -52,7 +50,6 @@ const handleSave = () => {
     setError3(n3 > 59 )
     setError4(n4 > 59 )
     if (n1 < 25 && n2 < 60 && n3 < 60 && n4 < 60 ){
-      console.log(error);
       const values = {
         valor1: input1,
         valor2: input2,

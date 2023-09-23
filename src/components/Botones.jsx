@@ -190,7 +190,6 @@ export const Botones = () => {
           }, 1000);
         }else if(player === "jugador2"){
           timerRefP2.current = setInterval(() => {
-              console.log("no para");
               dispatch({type: "jugador2"})
             }, 1000);
         }

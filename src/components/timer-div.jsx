@@ -7,7 +7,6 @@ import './timer-div.css';
 
 
 export const TimerDiv = ({hour, minute, second, player, handleClick, turn}) =>{
-    console.log(turn)
     return(<>
         <div onClick={handleClick} className={ turn ? "timeMove" : "TimerDiv"}>
             <p className={player == "jugador1" ? "j1" : ""}>{hour < 10 ? '0' + hour : hour}:{minute < 10 ? '0'+minute: minute}:{second< 10 ? '0'+second : second}</p>
